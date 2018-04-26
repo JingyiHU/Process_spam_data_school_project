@@ -1,24 +1,3 @@
-#The K means algorithm that uses the Euclidean distance above:
-K_means <- function(x, centers, distFun, nItter) {
-  clusterHistory <- vector(nItter, mode="list")
-  centerHistory <- vector(nItter, mode="list")
-  
-  for(i in 1:nItter) {
-    distsToCenters <- distFun(x, centers)
-    print(distsToCenters)
-    clusters <- apply(distsToCenters, 1, which.min)
-    centers <- apply(x, 2, tapply, clusters, mean)
-    # Saving history
-    clusterHistory[[i]] <- clusters
-    centerHistory[[i]] <- centers
-  }  
-  list(clusters=clusterHistory, centers=centerHistory)
-}
-centers <- ktest[sample(nrow(ktest), 3),] # Sample some centers, 3 for example
-res <- K_means(ktest, centers, distXY, 10)
-res
-
-
 # calcul des proportions
 prop.app = function(Xapp, zapp) {
     zapp = factor(zapp)
@@ -33,7 +12,7 @@ prop.app = function(Xapp, zapp) {
 }
 
 
-# calcul des centres de gravite
+# calcul des centres de gravité
 mu.app = function(Xapp, zapp) {
     zapp = factor(zapp)
     g = length(levels(zapp)) # nombre de classes
@@ -158,7 +137,7 @@ ad.val <- function(params, Xtst) {
         #cat("Il y a eu", nbRowsWithBothDensityEqualsToZero / n * 100, "% d'individus avec f1[i] == 0 && f2[i] == 0\n")    
     }
     if (nbRowsWithOneDensityVerySmall > 0) {
-        #cat("Il y a eu", nbRowsWithOneDensityVerySmall / n * 100, "% d'individus avec f1[i] == 0 && f2[i] extr??mement petit (ou l'inverse) menant ?? P(w1|x) = P(w2|x) = NaN. Classe choisit en fonction de max(f1[x],f2[x])\n")
+        #cat("Il y a eu", nbRowsWithOneDensityVerySmall / n * 100, "% d'individus avec f1[i] == 0 && f2[i] extrêmement petit (ou l'inverse) menant à P(w1|x) = P(w2|x) = NaN. Classe choisit en fonction de max(f1[x],f2[x])\n")
     }
     discrimination[["pred"]] = factor(discrimination[["pred"]])
     discrimination[["nbRowsWithBothDensityEqualsToZero"]] = nbRowsWithBothDensityEqualsToZero / n

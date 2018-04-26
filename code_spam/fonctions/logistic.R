@@ -4,12 +4,12 @@ log.app <- function(Xapp, zapp, intr = T, epsi = 1e-5) {
     
     Xapp <- as.matrix(Xapp)
     
-    if (intr == T) { # on ajoute une ordonn??e ?? l'origine
+    if (intr == T) { # on ajoute une ordonnée à l'origine
         Xapp <- cbind(rep(1,n),Xapp)
         p <- p + 1
     }
     
-    targ <- matrix(as.numeric(zapp),nrow=n) # ti: la realisation d'une variable Ti~B(pi)
+    targ <- matrix(as.numeric(zapp),nrow=n) # ti: la réalisation d'une variable Ti~B(pi)
     targ[which(targ==2),] <- 0              # remplacer la classe 2 par 0
     Xapp_transposed <- t(Xapp)
     
@@ -70,7 +70,7 @@ log.val <- function(beta, Xtst) {
 }
 
 
-# calculer des probabilites a posteriori de la classe 1
+# calculer des probabilités a posteriori de la classe 1
 postprob <- function(beta, X) {
     X <- as.matrix(X)
     

@@ -78,17 +78,17 @@ spamErrorFunction = function(X,Z,model, nbTests = 20, file = "spam.csv", printBe
     for (j in 1:nbTests) {
         sample = separ1(X,Z)
         if (model == qdaName) {
-            params = adq.app(sample$Xapp, sample$zapp) # calculer les parametres du modele
-            testPredictedClasses = ad.val(params, sample$Xtst) # predire les classes du jeu de donnees de test
+            params = adq.app(sample$Xapp, sample$zapp) # calculer les paramètres du modèle
+            testPredictedClasses = ad.val(params, sample$Xtst) # prédire les classes du jeu de données de test
         } 
         else if (model == ldaName) {
             params = adl.app(sample$Xapp, sample$zapp)
-            testPredictedClasses = ad.val(params, sample$Xtst) # predire les classes du jeu de donnees de test
+            testPredictedClasses = ad.val(params, sample$Xtst) # prédire les classes du jeu de données de test
             adl_f1_f2_nul[j,1] = testPredictedClasses$nbRowsWithBothDensityEqualsToZero
         }
         else if (model == nbaName) {
             params = nba.app(sample$Xapp, sample$zapp)
-            testPredictedClasses = ad.val(params, sample$Xtst) # predire les classes du jeu de donnees de test
+            testPredictedClasses = ad.val(params, sample$Xtst) # prédire les classes du jeu de données de test
         }
         else if (model == logName) {
             params = log.app(sample$Xapp, sample$zapp, intr, epsi)
@@ -111,7 +111,7 @@ spamErrorFunction = function(X,Z,model, nbTests = 20, file = "spam.csv", printBe
             sample_CV = separ2(X,Z)
             Kopt = kppv.tune(sample_CV$Xapp, sample_CV$zapp, sample_CV$Xval, sample_CV$zval, nppv = c(2*(1:6)-1))
             Kopt = min(Kopt)
-            predictionKPPV = kppv.val(sample_CV$Xapp, sample_CV$zapp, Kopt, sample_CV$Xtst) # predire les classes du jeu de donnees de test
+            predictionKPPV = kppv.val(sample_CV$Xapp, sample_CV$zapp, Kopt, sample_CV$Xtst) # prédire les classes du jeu de données de test
             testPredictedClasses = NULL
             testPredictedClasses$pred = 1 - compute.sucess.rate(predictionKPPV, sample$ztst)
         }
@@ -172,25 +172,30 @@ meanErrorRates <- function(fileNames, model, nbTests=20) {
         for (j in 1:nbTests) {
             sample = separ1(X,Z)
             if (model == qdaName) {
-                params = adq.app(sample$Xapp, sample$zapp) # calculer les parametres du modele
-                testPredictedClasses = ad.val(params, sample$Xtst) # predire les classes du jeu de donnees de test
+                params = adq.app(sample$Xapp, sample$zapp) # calculer les paramètres du modèle
+                testPredictedClasses = ad.val(params, sample$Xtst) # prédire les classes du jeu de données de test
             } 
             else if (model == ldaName) {
                 params = adl.app(sample$Xapp, sample$zapp)
-                testPredictedClasses = ad.val(params, sample$Xtst) # predire les classes du jeu de donnees de test
+                testPredictedClasses = ad.val(params, sample$Xtst) # prédire les classes du jeu de données de test
             }
             else if (model == nbaName) {
                 params = nba.app(sample$Xapp, sample$zapp)
-                testPredictedClasses = ad.val(params, sample$Xtst) # predire les classes du jeu de donnees de test
+                testPredictedClasses = ad.val(params, sample$Xtst) # prédire les classes du jeu de données de test
             }
             else if (model == logName) {
                 params = log.app(sample$Xapp, sample$zapp, intr, epsi)
                 testPredictedClasses = log.val(params$beta,sample$Xtst)
             }
             else if (model == logQuadName) {
+                if(file == brestcancerFile) {
+                    cat("We don't use the method ",model," when the data is ",file,".\n")
+                    break
+                }
+                else {
                     params = log_quad.app(sample$Xapp, sample$zapp, intr, epsi)
                     testPredictedClasses = log_quad.val(params$beta, sample$Xtst)
-              
+                }
             }
             else if (model == decisionTreeName) {
                 testPredictedClasses <- tree.app(sample$Xapp,sample$zapp,sample$Xtst)

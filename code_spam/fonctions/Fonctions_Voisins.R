@@ -1,5 +1,5 @@
 library(mclust)
-source("src/fonctions_tp4/distXY.R")
+source("src/fonctions/distXY.R")
 
 kppv.val = function(Xapp, zapp, K, Xtst) {
     zapp = factor(zapp)
@@ -7,18 +7,18 @@ kppv.val = function(Xapp, zapp, K, Xtst) {
     ztst = vector(length = testSize)
     
     # calculer les distances
-    distances = distXY(Xapp, Xtst) # les distances de Xtst ?? Xapp sont en colonnes
-    orderedDistancesIndexes = apply(distances, 2, order) # contient les indexs des distances tri??es dans l'ordre croissants
+    distances = distXY(Xapp, Xtst) # les distances de Xtst à Xapp sont en colonnes
+    orderedDistancesIndexes = apply(distances, 2, order) # contient les indexs des distances triées dans l'ordre croissants
     
     # trouver les K plus proches voisins pour chaque individu de la population de test
     for (i in 1:testSize) {
-        neighborsIndexes = orderedDistancesIndexes[1:K,i] # r??cup??rer les K premiers index, c'est ?? dire les K plus proches voisins
+        neighborsIndexes = orderedDistancesIndexes[1:K,i] # récupérer les K premiers index, c'est à dire les K plus proches voisins
         #cat(neighborsIndexes, "   ")
-        neighborsClasses = zapp[neighborsIndexes] # r??cup??rer les classes des K plus proches voisins
+        neighborsClasses = zapp[neighborsIndexes] # récupérer les classes des K plus proches voisins
         #cat(neighborsClasses, "   ")
-        neighborsClassesContingency = table(neighborsClasses) # compter le nombre de repr??sentants par classe
+        neighborsClassesContingency = table(neighborsClasses) # compter le nombre de représentants par classe
         #cat(neighborsClassesContingency, "   ")
-        mostRepresentedClass = names(which.max(neighborsClassesContingency)) # r??cup??rer le nom de la classe la plus repr??sent??
+        mostRepresentedClass = names(which.max(neighborsClassesContingency)) # récupérer le nom de la classe la plus représenté
         #cat(mostRepresentedClass, "   ")
         ztst[i] = mostRepresentedClass
     }
@@ -44,9 +44,9 @@ kppv.tune <- function(Xapp, zapp, Xval, zval, nppv, skipOneNeighbor = TRUE, useR
             if (successRate == maxSuccessRate) {
                 optimumForK = c(optimumForK, K) # ajouter une autre valeur optimale possible de K
             }
-            else { # "successRate" sup??rieur ?? "maxSuccessRate"
+            else { # "successRate" supérieur à "maxSuccessRate"
                 optimumForK = c(K) # remplacer la valeur optimale de K
-                maxSuccessRate = successRate # mettre ?? jour le "maxSuccessRate"
+                maxSuccessRate = successRate # mettre à jour le "maxSuccessRate"
             }
         }
     }
